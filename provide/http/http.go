@@ -41,6 +41,8 @@ var (
 
 	providerHttpName = "http"
 
+	client = resty.New().SetRetryCount(3)
+
 	GET     Method = resty.MethodGet
 	POST    Method = resty.MethodPost
 	PUT     Method = resty.MethodPut
@@ -143,7 +145,9 @@ func SetClient(c *option) status_neko.Option[*option] {
 }
 
 func NewHTTP(c Config, opts ...status_neko.Option[*option]) *HTTP {
-	o := &option{}
+	o := &option{
+		client: client,
+	}
 	for _, opt := range opts {
 		opt(o)
 	}
